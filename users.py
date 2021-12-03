@@ -28,3 +28,25 @@ class User:
         query = "INSERT INTO users ( first_name , last_name , email , created_at, updated_at ) VALUES ( %(fname)s , %(lname)s , %(email)s , NOW() , NOW() );"
         # data is a dictionary that will be passed into the save method from server.py
         return connectToMySQL('users_schema').query_db( query, data )
+
+    @classmethod
+    def read_one(cls, selected_id):
+        query = (f"SELECT * FROM USERS WHERE id = {selected_id};")
+        selection_one = connectToMySQL('users_schema').query_db(query)
+        return selection_one
+    
+    @classmethod
+    def edit(cls, data):
+        query = "UPDATE users SET first_name = %(fname)s, last_name = %(lname)s, email = %(email)s, updated_at = NOW() WHERE id = %(id_from)s;"
+        return connectToMySQL('users_schema').query_db(query, data)
+
+    @classmethod
+    def delete(cls, id_from):
+        query = (f"DELETE FROM users WHERE id = {id_from};")
+        return connectToMySQL('users_schema').query_db(query)
+
+    @classmethod
+    def read_one_new(cls):
+        query = "SELECT MAX(id) FROM users;"
+        return connectToMySQL('users_schema').query_db(query)
+    
